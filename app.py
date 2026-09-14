@@ -4,8 +4,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 
-# ── CONFIG ────────────────────────────────────────────────────────────────────
-API_URL ="http://127.0.0.1:8000" 
+
+API_URL ="https://market-basket-segmentation.onrender.com" or "http://127.0.0.1:8000" 
 
 st.set_page_config(
     page_title="Market Basket Segmentation",
