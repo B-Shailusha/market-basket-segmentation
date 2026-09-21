@@ -247,39 +247,40 @@ with tab1:
         except Exception as e:
             st.error(f"Unexpected error: {e}")
 
+# ── SEGMENT DATA (shared across tabs) ─────────────────────────────────────────
+try:
+    resp_seg = requests.get(f"{API_URL}/segments", timeout=10)
+    if resp_seg.status_code == 200:
+        segments = resp_seg.json()
+    else:
+        raise ValueError("bad status")
+except Exception:
+    segments = {
+        "0": {"name": "Premium In-Store Loyalists",    "emoji": "🏆", "color": "#FFD700",
+              "description": "High-income, high-spending, in-store focused.",
+              "strategy": "Loyalty programs & premium offers."},
+        "1": {"name": "Budget-Conscious Browsers",     "emoji": "🔍", "color": "#87CEEB",
+              "description": "Low income, high web visits, low purchases.",
+              "strategy": "Flash sales & cart-abandonment campaigns."},
+        "2": {"name": "Omnichannel Mid-Spenders",      "emoji": "🛒", "color": "#90EE90",
+              "description": "Mid-income, shops both online and in-store.",
+              "strategy": "Cross-channel loyalty points."},
+        "3": {"name": "High-Value Digital Shoppers",   "emoji": "💻", "color": "#DDA0DD",
+              "description": "High income, prefers web purchases.",
+              "strategy": "Personalized online recommendations."},
+        "4": {"name": "Affluent Occasional Buyers",    "emoji": "💎", "color": "#FFA07A",
+              "description": "High income but high recency — at risk of drifting.",
+              "strategy": "Win-back & seasonal exclusive offers."},
+        "5": {"name": "Low-Engagement At-Risk",        "emoji": "⚠️", "color": "#F08080",
+              "description": "Low income, low spending, high recency.",
+              "strategy": "Re-engagement discounts & surveys."},
+    }
+
+rows = [segments[str(k)] for k in range(6)]
+
 # ─────────────────────────── TAB 2 : EXPLORER ────────────────────────────────
 with tab2:
     st.markdown("### 📊 All 6 Customer Segments")
-
-    try:
-        resp_seg = requests.get(f"{API_URL}/segments", timeout=10)
-        if resp_seg.status_code == 200:
-            segments = resp_seg.json()
-        else:
-            raise ValueError("bad status")
-    except Exception:
-        segments = {
-            "0": {"name": "Premium In-Store Loyalists",    "emoji": "🏆", "color": "#FFD700",
-                  "description": "High-income, high-spending, in-store focused.",
-                  "strategy": "Loyalty programs & premium offers."},
-            "1": {"name": "Budget-Conscious Browsers",     "emoji": "🔍", "color": "#87CEEB",
-                  "description": "Low income, high web visits, low purchases.",
-                  "strategy": "Flash sales & cart-abandonment campaigns."},
-            "2": {"name": "Omnichannel Mid-Spenders",      "emoji": "🛒", "color": "#90EE90",
-                  "description": "Mid-income, shops both online and in-store.",
-                  "strategy": "Cross-channel loyalty points."},
-            "3": {"name": "High-Value Digital Shoppers",   "emoji": "💻", "color": "#DDA0DD",
-                  "description": "High income, prefers web purchases.",
-                  "strategy": "Personalized online recommendations."},
-            "4": {"name": "Affluent Occasional Buyers",    "emoji": "💎", "color": "#FFA07A",
-                  "description": "High income but high recency — at risk of drifting.",
-                  "strategy": "Win-back & seasonal exclusive offers."},
-            "5": {"name": "Low-Engagement At-Risk",        "emoji": "⚠️", "color": "#F08080",
-                  "description": "Low income, low spending, high recency.",
-                  "strategy": "Re-engagement discounts & surveys."},
-        }
-
-    rows = [segments[k] if isinstance(k, str) else segments[str(k)] for k in sorted(segments.keys(), key=int)]
 
     for i in range(0, 6, 3):
         cols = st.columns(3, gap="medium")
