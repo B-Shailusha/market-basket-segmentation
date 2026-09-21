@@ -1,9 +1,7 @@
-fastapi
-uvicorn
+streamlit
+requests
+plotly>=5.0.0
+pandas
 scikit-learn==1.6.1
 joblib
 numpy
-streamlit
-requests
-plotly
-pandas
